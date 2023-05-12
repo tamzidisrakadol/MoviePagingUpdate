@@ -5,25 +5,30 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.lifecycle.Observer
+import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
+import androidx.recyclerview.widget.GridLayoutManager
 import com.example.moviewithpaging.R
+import com.example.moviewithpaging.adapter.MovieAdapter
+import com.example.moviewithpaging.api.MovieDBClient
 import com.example.moviewithpaging.databinding.FragmentFirstBinding
+import com.example.moviewithpaging.repository.MovieRepository
+import com.example.moviewithpaging.viewModel.MovieViewModel
+import com.example.moviewithpaging.viewModel.ViewModelFactory
 
-/**
- * A simple [Fragment] subclass as the default destination in the navigation.
- */
+
 class FirstFragment : Fragment() {
 
     private var _binding: FragmentFirstBinding? = null
-
-    // This property is only valid between onCreateView and
-    // onDestroyView.
+    private lateinit var adapter: MovieAdapter
+    private lateinit var viewModel: MovieViewModel
     private val binding get() = _binding!!
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
 
         _binding = FragmentFirstBinding.inflate(inflater, container, false)
         return binding.root
@@ -33,9 +38,17 @@ class FirstFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        binding.buttonFirst.setOnClickListener {
-            findNavController().navigate(R.id.action_FirstFragment_to_SecondFragment)
-        }
+
+        val api = MovieDBClient.getClient()
+        val repository = MovieRepository(api)
+        viewModel =
+            ViewModelProvider(this, ViewModelFactory(repository))[MovieViewModel::class.java]
+        adapter = MovieAdapter(requireContext())
+        viewModel.movieList.observe(viewLifecycleOwner, Observer {
+            adapter.submitData(lifecycle, it)
+        })
+        binding.recyclerView.layoutManager = GridLayoutManager(requireContext(), 2)
+        binding.recyclerView.adapter = adapter
     }
 
     override fun onDestroyView() {

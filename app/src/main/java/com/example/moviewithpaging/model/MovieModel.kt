@@ -1,7 +1,9 @@
 package com.example.moviewithpaging.model
 
+import androidx.room.Entity
 import com.google.gson.annotations.SerializedName
 
+@Entity(tableName = "MovieTable")
 data class MovieModel(
     val id: Int=0,
     @SerializedName("poster_path")
