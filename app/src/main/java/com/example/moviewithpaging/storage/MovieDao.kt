@@ -14,6 +14,6 @@ interface MovieDao {
     suspend fun addMovie(movieList:List<MovieModel>)
 
     @Query("SELECT * FROM MovieTable")
-    suspend fun getMovie():PagingSource<Int,MovieModel>
+    fun getMovie():PagingSource<Int,MovieModel>
 
 }

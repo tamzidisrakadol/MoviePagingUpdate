@@ -8,16 +8,18 @@ import android.view.ViewGroup
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
+import androidx.paging.ExperimentalPagingApi
 import androidx.recyclerview.widget.GridLayoutManager
 import com.example.moviewithpaging.R
 import com.example.moviewithpaging.adapter.MovieAdapter
 import com.example.moviewithpaging.api.MovieDBClient
 import com.example.moviewithpaging.databinding.FragmentFirstBinding
 import com.example.moviewithpaging.repository.MovieRepository
+import com.example.moviewithpaging.storage.MovieDatabase
 import com.example.moviewithpaging.viewModel.MovieViewModel
 import com.example.moviewithpaging.viewModel.ViewModelFactory
 
-
+@ExperimentalPagingApi
 class FirstFragment : Fragment() {
 
     private var _binding: FragmentFirstBinding? = null
@@ -40,7 +42,8 @@ class FirstFragment : Fragment() {
 
 
         val api = MovieDBClient.getClient()
-        val repository = MovieRepository(api)
+        val db =MovieDatabase.getDatabase(requireContext())
+        val repository = MovieRepository(api,db)
         viewModel =
             ViewModelProvider(this, ViewModelFactory(repository))[MovieViewModel::class.java]
         adapter = MovieAdapter(requireContext())
