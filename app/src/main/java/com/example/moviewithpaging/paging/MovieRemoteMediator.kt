@@ -29,30 +29,36 @@ class MovieRemoteMediator(private val api:MovieDBInterface, private val db:Movie
                 }
                 LoadType.PREPEND -> {
                     val remoteKeys = getRemoteKeysForFirstTime(state)
-                    val prev = remoteKeys?.previousKey
+                    val prevPage = remoteKeys?.previousKey
                         ?: return MediatorResult.Success(
                             endOfPaginationReached = remoteKeys != null
                         )
-                    prev
+                    prevPage
                 }
                 LoadType.APPEND -> {
                     val remoteKeys = getRemoteKeyForLastItem(state)
-                    val nxtPage = remoteKeys?.nextKey
+                    val nextPage = remoteKeys?.nextKey
                         ?: return MediatorResult.Success(
                             endOfPaginationReached = remoteKeys!=null
                         )
-                    nxtPage
+                    nextPage
                 }
+                else -> 1
             }
 
             val response = api.getPopularMovies(currentPage)
-            val endOfPaginationReached = response.blockingGet().totalPages == currentPage   // single
+            val endOfPaginationReached = response.totalPages == currentPage   // single
             val prevPage = if (currentPage == 1) null else currentPage - 1
             val nextPage = if (endOfPaginationReached) null else currentPage + 1
 
             db.withTransaction {
-                movieDao.addMovie(response.blockingGet().results)  // single
-                val keys = response.blockingGet().results.map { // single
+                if (loadType==LoadType.REFRESH){
+                    movieDao.deleteMovie()
+                    remoteDao.deleteAllRemoteKeys()
+                }
+
+                movieDao.addMovie(response.results)  // single
+                val keys = response.results.map { // single
                     MovieRemoteKeys(
                         id = it.id,
                         nextKey = nextPage,

@@ -7,12 +7,11 @@ import com.example.moviewithpaging.api.MovieDBInterface
 import com.example.moviewithpaging.model.MovieModel
 
 
-
 class MovieDataSource(
     private val apiService: MovieDBInterface,
 ) : PagingSource<Int, MovieModel>() {
 
-  //  private val networkState: MutableLiveData<NetworkState> = MutableLiveData()
+
 
     override fun getRefreshKey(state: PagingState<Int, MovieModel>): Int? {
         return state.anchorPosition?.let {
@@ -22,18 +21,15 @@ class MovieDataSource(
     }
 
     override suspend fun load(params: LoadParams<Int>): LoadResult<Int, MovieModel> {
-
-
         return try {
             val page = params.key ?: 1
             val response = apiService.getPopularMovies(page)
             LoadResult.Page(
-                data = response.blockingGet().results,
+                data = response.results,
                 prevKey = if (page == 1) null else page - 1,
-                nextKey = if (page==response.blockingGet().totalPages) null else page + 1
+                nextKey = if (page==response.totalPages) null else page + 1
             )
         } catch (e: Exception) {
-
             LoadResult.Error(e)
         }
     }

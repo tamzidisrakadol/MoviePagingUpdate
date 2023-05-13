@@ -37,8 +37,9 @@ object MovieDBClient {
             .baseUrl(Constraints.movieUrl)
             .client(okHttpClient)
             .addConverterFactory(GsonConverterFactory.create())
-            .addCallAdapterFactory(RxJava3CallAdapterFactory.create())
             .build()
             .create(MovieDBInterface::class.java)
     }
 }
+
+//.addCallAdapterFactory(RxJava3CallAdapterFactory.create())

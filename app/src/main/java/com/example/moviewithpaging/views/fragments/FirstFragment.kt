@@ -16,6 +16,7 @@ import com.example.moviewithpaging.R
 import com.example.moviewithpaging.adapter.MovieAdapter
 import com.example.moviewithpaging.api.MovieDBClient
 import com.example.moviewithpaging.databinding.FragmentFirstBinding
+import com.example.moviewithpaging.model.MovieModel
 import com.example.moviewithpaging.repository.MovieRepository
 import com.example.moviewithpaging.storage.MovieDatabase
 import com.example.moviewithpaging.viewModel.MovieViewModel
@@ -49,12 +50,17 @@ class FirstFragment : Fragment() {
         val api = MovieDBClient.getClient()
         val db =MovieDatabase.getDatabase(requireContext())
         val repository = MovieRepository(api,db)
+
         viewModel = ViewModelProvider(this, ViewModelFactory(repository))[MovieViewModel::class.java]
+
         adapter = MovieAdapter(requireContext())
         binding.recyclerView.layoutManager = GridLayoutManager(requireContext(), 2)
         binding.recyclerView.adapter = adapter
+
+
         viewModel.movieList.observe(viewLifecycleOwner,Observer{
             adapter.submitData(lifecycle,it)
+
         })
     }
 
@@ -63,3 +69,5 @@ class FirstFragment : Fragment() {
         _binding = null
     }
 }
+
+

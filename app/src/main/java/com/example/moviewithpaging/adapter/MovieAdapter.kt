@@ -6,10 +6,8 @@ import android.view.ViewGroup
 import androidx.paging.PagingDataAdapter
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
-import com.bumptech.glide.Glide
 import com.example.moviewithpaging.databinding.ListItemBinding
 import com.example.moviewithpaging.model.MovieModel
-import com.example.moviewithpaging.utility.Constraints
 
 class MovieAdapter(private val context: Context) :
     PagingDataAdapter<MovieModel, MovieAdapter.MovieViewHolder>(comparator) {

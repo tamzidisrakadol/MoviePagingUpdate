@@ -7,4 +7,6 @@ object Constraints {
     const val posterUrl = "https://image.tmdb.org/t/p/w342"
     const val FIRST_PAGE = 1
     const val POST_PER_PAGE = 20
+
+
 }

@@ -14,4 +14,7 @@ interface RemoteDao {
 
     @Query("SELECT * FROM MovieRemoteKeys WHERE id =:id")
     fun getRemoteKeys(id:Int):MovieRemoteKeys
+
+    @Query("DELETE FROM MovieRemoteKeys")
+    suspend fun deleteAllRemoteKeys()
 }

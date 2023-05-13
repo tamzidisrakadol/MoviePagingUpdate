@@ -15,8 +15,7 @@ import com.example.moviewithpaging.utility.Constraints
 class MovieRepository(private val apiService:MovieDBInterface,private val db:MovieDatabase) {
     fun getMovieList() = Pager(
         config = PagingConfig(pageSize = Constraints.POST_PER_PAGE, maxSize = 100),
-        remoteMediator = MovieRemoteMediator(apiService,db),
-        pagingSourceFactory = {db.movieDao().getMovie()}
+        pagingSourceFactory = {MovieDataSource(apiService)}
     ).liveData
 
 }
