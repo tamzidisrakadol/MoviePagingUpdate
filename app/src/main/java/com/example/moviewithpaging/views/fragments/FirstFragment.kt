@@ -1,12 +1,14 @@
 package com.example.moviewithpaging.views.fragments
 
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.paging.ExperimentalPagingApi
 import androidx.recyclerview.widget.GridLayoutManager
@@ -18,6 +20,9 @@ import com.example.moviewithpaging.repository.MovieRepository
 import com.example.moviewithpaging.storage.MovieDatabase
 import com.example.moviewithpaging.viewModel.MovieViewModel
 import com.example.moviewithpaging.viewModel.ViewModelFactory
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 @ExperimentalPagingApi
 class FirstFragment : Fragment() {
@@ -44,14 +49,13 @@ class FirstFragment : Fragment() {
         val api = MovieDBClient.getClient()
         val db =MovieDatabase.getDatabase(requireContext())
         val repository = MovieRepository(api,db)
-        viewModel =
-            ViewModelProvider(this, ViewModelFactory(repository))[MovieViewModel::class.java]
+        viewModel = ViewModelProvider(this, ViewModelFactory(repository))[MovieViewModel::class.java]
         adapter = MovieAdapter(requireContext())
-        viewModel.movieList.observe(viewLifecycleOwner, Observer {
-            adapter.submitData(lifecycle, it)
-        })
         binding.recyclerView.layoutManager = GridLayoutManager(requireContext(), 2)
         binding.recyclerView.adapter = adapter
+        viewModel.movieList.observe(viewLifecycleOwner,Observer{
+            adapter.submitData(lifecycle,it)
+        })
     }
 
     override fun onDestroyView() {

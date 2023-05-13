@@ -8,6 +8,7 @@ import retrofit2.adapter.rxjava3.RxJava3CallAdapterFactory
 import retrofit2.converter.gson.GsonConverterFactory
 import java.util.concurrent.TimeUnit
 
+
 object MovieDBClient {
 
     fun getClient():MovieDBInterface{
@@ -33,10 +34,10 @@ object MovieDBClient {
             .build()
 
         return Retrofit.Builder()
-            .client(okHttpClient)
             .baseUrl(Constraints.movieUrl)
-            .addCallAdapterFactory(RxJava3CallAdapterFactory.create())
+            .client(okHttpClient)
             .addConverterFactory(GsonConverterFactory.create())
+            .addCallAdapterFactory(RxJava3CallAdapterFactory.create())
             .build()
             .create(MovieDBInterface::class.java)
     }

@@ -38,8 +38,8 @@ class MovieAdapter(private val context: Context) :
         val item = getItem(position)
         if (item != null) {
             holder.binding.movieNameTV.text = item.title
-            val posterUrl = Constraints.posterUrl + item.posterPath
-            Glide.with(context).load(posterUrl).into(holder.binding.movieImgview)
+           // val posterUrl = Constraints.posterUrl + item.posterPath
+          //  Glide.with(context).load(posterUrl).into(holder.binding.movieImgview)
         }
     }
 

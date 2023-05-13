@@ -6,6 +6,7 @@ import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
 import com.example.moviewithpaging.model.MovieModel
+import com.example.moviewithpaging.model.MovieResponse
 
 @Dao
 interface MovieDao {
@@ -15,5 +16,6 @@ interface MovieDao {
 
     @Query("SELECT * FROM MovieTable")
     fun getMovie():PagingSource<Int,MovieModel>
+
 
 }

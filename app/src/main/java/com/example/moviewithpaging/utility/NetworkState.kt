@@ -4,7 +4,6 @@ enum class Status {
     Running,
     Success,
     Failed
-
 }
 
 class NetworkState(val status: Status, val msg: String) {
