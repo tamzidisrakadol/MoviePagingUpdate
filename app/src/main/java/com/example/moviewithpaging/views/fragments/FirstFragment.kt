@@ -9,6 +9,7 @@ import android.view.ViewGroup
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.viewModelScope
 import androidx.navigation.fragment.findNavController
 import androidx.paging.ExperimentalPagingApi
 import androidx.recyclerview.widget.GridLayoutManager
@@ -22,6 +23,7 @@ import com.example.moviewithpaging.storage.MovieDatabase
 import com.example.moviewithpaging.viewModel.MovieViewModel
 import com.example.moviewithpaging.viewModel.ViewModelFactory
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
@@ -57,10 +59,8 @@ class FirstFragment : Fragment() {
         binding.recyclerView.layoutManager = GridLayoutManager(requireContext(), 2)
         binding.recyclerView.adapter = adapter
 
-
-        viewModel.movieList.observe(viewLifecycleOwner,Observer{
+        viewModel.movielist.observe(viewLifecycleOwner, Observer {
             adapter.submitData(lifecycle,it)
-
         })
     }
 

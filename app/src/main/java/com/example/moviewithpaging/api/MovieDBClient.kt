@@ -36,10 +36,10 @@ object MovieDBClient {
         return Retrofit.Builder()
             .baseUrl(Constraints.movieUrl)
             .client(okHttpClient)
+            .addCallAdapterFactory(RxJava3CallAdapterFactory.create())
             .addConverterFactory(GsonConverterFactory.create())
             .build()
             .create(MovieDBInterface::class.java)
     }
 }
 
-//.addCallAdapterFactory(RxJava3CallAdapterFactory.create())
